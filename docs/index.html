@@ -44,6 +44,12 @@
 
 <body>
   <h1>やんちゃクラブ公式ホームページ</h1>
+  <h2>Desc</h2>
+  <p>
+    おはようございます。<a href="https://x.com/yancya">yancya</a>です。
+    <span id="year">    </span>年<span id="month"> </span>月<span id="date"> </span>日 <span id="day">  </span>曜日の朝です。
+    タイマー<span id="timer">15</span>分。
+  </p>
   <h2>Links</h2>
   <p>Events: <a href="./events">イベント告知</a></p>
   <p>YouTube: <a href="https://youtube.yancya.club">youtube.yancya.club</a></p>
@@ -61,6 +67,30 @@
   <p><a href="yancya-club-401-500">やんちゃクラブ４０１〜５００</a> (2022/10/21〜2023/01/28)</p>
   <p><a href="yancya-club-501-600">やんちゃクラブ５０１〜６００</a> (2023/01/29〜2023/05/08)</p>
   <p><a href="yancya-club-601-700">やんちゃクラブ６０１〜７００</a> (2023/05/09〜2023/08/16)</p>
+  <script>
+    window.addEventListener("load", (event) => {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const date_ = date.getDate();
+      const days = ["日", "月", "火", "水", "木", "金", "土"];
+      const day = days[date.getDay()];
+      document.getElementById("year").textContent = year;
+      document.getElementById("month").textContent = month;
+      document.getElementById("date").textContent = date_;
+      document.getElementById("day").textContent = day;
+    });
+    let timer = 15;
+    const intervalId = setInterval(()=>{
+      console.log('Decrement timer');
+      timer--;
+      document.getElementById("timer").textContent = timer;
+      if(timer <= 0) {
+        clearInterval(intervalId);
+        console.log('Clear interval');
+      }
+    }, 1000 * 60);
+  </script>
 </body>
 
 </html>
