@@ -29,7 +29,7 @@ jobs:
 
       - name: Create Issue From File
         if: failure()
-        uses: peter-evans/create-issue-from-file@v5
+        uses: peter-evans/create-issue-from-file@v6
         with:
           title: リンク切れを検出しました
           content-filepath: ./lychee/out.md
