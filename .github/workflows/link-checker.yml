@@ -1,0 +1,36 @@
+name: Check Links
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    # 毎週月曜日 9:00 JST (00:00 UTC)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  link-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Link Checker
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # docsディレクトリ内の全HTMLファイルをチェック
+          args: --verbose --no-progress 'docs/**/*.html'
+          # 429 (Too Many Requests) はリトライする
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Create Issue From File
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: リンク切れを検出しました
+          content-filepath: ./lychee/out.md
+          labels: bug, automated
