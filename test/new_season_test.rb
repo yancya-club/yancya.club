@@ -27,9 +27,9 @@ class NewSeasonTest < Minitest::Test
 
         <body>
           <div class="container">
-            <div><img src="./yancya-club-1701-1800.001.jpeg" /></div>
-            <div><img src="./yancya-club-1701-1800.002.jpeg" /></div>
-            <div><img src="./yancya-club-1701-1800.003.jpeg" /></div>
+            <div><img src="./yancya-club-1701-1800.001.jpeg" alt="やんちゃクラブ #1701 サムネイル" decoding="async" /></div>
+            <div><img src="./yancya-club-1701-1800.002.jpeg" alt="やんちゃクラブ #1702 サムネイル" decoding="async" /></div>
+            <div><img src="./yancya-club-1701-1800.003.jpeg" alt="やんちゃクラブ #1703 サムネイル" decoding="async" /></div>
           </div>
         </body>
       HTML
@@ -73,6 +73,43 @@ class NewSeasonTest < Minitest::Test
       assert_includes html, "yancya-club-1701-1800.001.jpeg"
       refute_includes html, "index.html\""
       refute_includes html, ".DS_Store"
+    end
+  end
+
+  def test_first_three_images_are_eager_and_rest_are_lazy
+    Dir.mktmpdir do |tmp|
+      dir = File.join(tmp, "yancya-club-1701-1800")
+      FileUtils.mkdir_p(dir)
+      %w[001 002 003 004 005].each do |n|
+        FileUtils.touch(File.join(dir, "yancya-club-1701-1800.#{n}.jpeg"))
+      end
+
+      img_lines = NewSeason.index_html(dir).lines.grep(/<img/)
+
+      img_lines.first(3).each do |line|
+        refute_includes line, 'loading="lazy"', "先頭3枚は即時読み込みのまま: #{line}"
+        assert_includes line, 'decoding="async"'
+      end
+      img_lines.drop(3).each do |line|
+        assert_includes line, 'loading="lazy"', "4枚目以降は遅延読み込み: #{line}"
+        assert_includes line, 'decoding="async"'
+      end
+    end
+  end
+
+  def test_alt_numbers_derive_from_filename_serial_and_season_start
+    Dir.mktmpdir do |tmp|
+      dir = File.join(tmp, "yancya-club-001-100")
+      FileUtils.mkdir_p(dir)
+      %w[001 050 100].each do |n|
+        FileUtils.touch(File.join(dir, "yancya-club-001-100.#{n}.jpeg"))
+      end
+
+      html = NewSeason.index_html(dir)
+
+      assert_includes html, 'alt="やんちゃクラブ #1 サムネイル"'
+      assert_includes html, 'alt="やんちゃクラブ #50 サムネイル"'
+      assert_includes html, 'alt="やんちゃクラブ #100 サムネイル"'
     end
   end
 
