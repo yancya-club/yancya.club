@@ -13,6 +13,9 @@
 # --dry-run のときは index.html を書き込まず、生成内容を標準出力に表示する。
 
 module NewSeason
+  # ファーストビュー相当。先頭からこの枚数は loading="lazy" を付けず即時読み込みにする
+  EAGER_COUNT = 3
+
   module_function
 
   def image_files(dir)
@@ -33,7 +36,14 @@ module NewSeason
     images = image_files(dir)
     raise ArgumentError, "jpeg が1枚も見つからない: #{dir}" if images.empty?
 
-    lines = images.map { |name| %(    <div><img src="./#{name}" /></div>) }
+    lines = images.each_with_index.map do |name, i|
+      serial = name[/\.(\d+)\.jpeg\z/, 1]
+      episode = from + Integer(serial, 10) - 1
+      attrs = %(alt="やんちゃクラブ ##{episode} サムネイル")
+      attrs += %( loading="lazy") if i >= EAGER_COUNT
+      attrs += %( decoding="async")
+      %(    <div><img src="./#{name}" #{attrs} /></div>)
+    end
 
     <<~HTML
       <!DOCTYPE html>
