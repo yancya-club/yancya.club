@@ -13,6 +13,8 @@ on:
 jobs:
   link-checker:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -21,7 +23,9 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           # docsディレクトリ内の全HTMLファイルをチェック
-          args: --verbose --no-progress 'docs/**/*.html'
+          # --root-dir: href="/" のようなルート相対リンクを docs/ 基準で解決する
+          # --exclude-path: _template配下はプレースホルダ画像を含まないテンプレートなので対象外
+          args: --verbose --no-progress --root-dir ./docs --exclude-path 'docs/events/_template' 'docs/**/*.html'
           # 429 (Too Many Requests) はリトライする
           fail: true
         env:
