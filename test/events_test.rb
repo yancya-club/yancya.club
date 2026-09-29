@@ -7,18 +7,41 @@ class EventsTest < Minitest::Test
   EVENTS_INDEX = File.join(REPO_ROOT, "docs", "events", "index.html")
   TEMPLATE_INDEX = File.join(REPO_ROOT, "docs", "events", "_template", "index.html")
 
-  def test_events_index_has_no_planned_events_placeholder_after_heading
+  PLACEHOLDER = "現在告知中のイベントはありません"
+
+  def planned_section
     html = File.read(EVENTS_INDEX)
     heading = "<h2>やんちゃクラブイベント予定</h2>"
 
     assert_includes html, heading, "予定見出しが見つからない"
 
     after_heading = html[(html.index(heading) + heading.length)..]
-    next_heading_index = after_heading.index("<h2>")
-    between = after_heading[0...next_heading_index]
+    after_heading[0...after_heading.index("<h2>")]
+  end
 
-    assert_includes between, "現在告知中のイベントはありません",
-                     "予定が無い期間のプレースホルダ文言が無い"
+  def test_events_index_planned_section_shows_links_or_placeholder_exclusively
+    section = planned_section
+    has_links = section.include?("<a ")
+
+    if has_links
+      refute_includes section, PLACEHOLDER, "告知中イベントがあるのにプレースホルダが残っている"
+    else
+      assert_includes section, PLACEHOLDER, "予定が無い期間のプレースホルダ文言が無い"
+    end
+  end
+
+  def test_events_index_links_to_fes_001
+    assert_includes planned_section, %(href="fes/001"), "やんちゃフェス Vol.001 へのリンクが無い"
+  end
+
+  def test_fes_001_page_has_flyer_and_access_images
+    dir = File.join(REPO_ROOT, "docs", "events", "fes", "001")
+    html = File.read(File.join(dir, "index.html"))
+
+    %w[flyer.png access.png].each do |name|
+      assert File.exist?(File.join(dir, name)), "#{name} が無い"
+      assert_includes html, %(src="#{name}"), "index.html が #{name} を参照していない"
+    end
   end
 
   def test_events_index_completed_events_are_in_descending_date_order
