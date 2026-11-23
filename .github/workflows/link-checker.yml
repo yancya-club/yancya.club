@@ -27,11 +27,13 @@ jobs:
           # --exclude-path: _template配下はプレースホルダ画像を含まないテンプレートなので対象外
           # --remap: 自サイトの絶対URLは公開前でも検証できるよう docs/ の実ファイルに読み替える
           # --exclude x.com: botアクセスを403で拒否するため
+          # フェス会場への徒歩ルートは GitHub Actions からのアクセスに 403 を返す (#40)
           args: >-
             --verbose --no-progress --root-dir ./docs
             --exclude-path 'docs/events/_template'
             --remap '^https://yancya\.club/(.*)$ file://${{ github.workspace }}/docs/$1'
             --exclude '^https://x\.com/'
+            --exclude '^https://www\.google\.com/maps/dir/\?api=1&origin=35\.6538781%2C139\.6938606&destination=35\.6571678%2C139\.697934&travelmode=walking$'
             'docs/**/*.html'
           # 429 (Too Many Requests) はリトライする
           fail: true
