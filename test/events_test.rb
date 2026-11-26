@@ -53,6 +53,8 @@ class EventsTest < Minitest::Test
     assert_includes html, "2026年12月19日（土）18:00"
     assert_includes html, "2026年12月19日（土）23:00"
     assert_includes html, "1,500円＋1ドリンク"
+    assert_includes html, "https://calendar.google.com/calendar/render?action=TEMPLATE"
+    assert_includes html, "dates=20261219T090000Z/20261219T140000Z"
   end
 
   def test_events_index_links_to_fes_001_as_completed

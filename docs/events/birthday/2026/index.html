@@ -32,6 +32,8 @@
       --warm-bulb: #ffd670;
       --line: rgba(255, 105, 184, 0.28);
       --line-soft: rgba(253, 246, 250, 0.14);
+      --cols-2: minmax(0, 1.25fr) minmax(0, 0.85fr);
+      --col-gap: 28px;
       --font-display: "Space Grotesk", "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
       --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
     }
@@ -115,8 +117,8 @@
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-      gap: 36px;
+      grid-template-columns: var(--cols-2);
+      gap: var(--col-gap);
       align-items: center;
     }
 
@@ -166,6 +168,13 @@
       border-radius: 10px;
       padding: 13px 15px;
     }
+    .stat-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
     .stat-label {
       display: block;
       font-family: var(--font-display);
@@ -174,6 +183,20 @@
       letter-spacing: 0.14em;
       color: var(--neon-pink);
       margin-bottom: 4px;
+    }
+    .stat-head .stat-label {
+      margin-bottom: 0;
+    }
+    .stat-action {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .stat-action:hover {
+      color: #ffffff;
+      text-decoration: underline;
     }
     .stat-val {
       display: block;
@@ -257,7 +280,7 @@
     }
 
     .toast-banner {
-      margin: 36px 0 32px;
+      margin: var(--col-gap) 0;
       padding: 14px 20px;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
@@ -271,8 +294,8 @@
 
     .menu-section {
       display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
-      gap: 28px;
+      grid-template-columns: var(--cols-2);
+      gap: var(--col-gap);
       align-items: start;
     }
 
@@ -281,6 +304,38 @@
       border: 1px solid var(--line-soft);
       border-radius: 14px;
       padding: 26px 28px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-bottom: 18px;
+    }
+    .panel-head h2 {
+      margin: 0;
+    }
+    .cal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      border: 1px solid rgba(92, 238, 248, 0.42);
+      background: rgba(92, 238, 248, 0.06);
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .cal-btn:hover {
+      background: rgba(92, 238, 248, 0.16);
+      border-color: var(--neon-cyan);
+      color: #ffffff;
     }
 
     h2 {
@@ -420,7 +475,10 @@
 
         <div class="quick-board">
           <div class="stat">
-            <span class="stat-label">DATE &amp; TIME</span>
+            <div class="stat-head">
+              <span class="stat-label">DATE &amp; TIME</span>
+              <a class="stat-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=yancya+%E7%94%9F%E8%AA%95+2026&amp;dates=20261219T090000Z/20261219T140000Z&amp;ctz=Asia/Tokyo&amp;location=%E9%B6%AF%E8%B0%B7%23B5IDOLCAFE%28%E3%83%93%E3%83%BC%E3%82%B4%E3%82%A2%E3%82%A4%E3%83%89%E3%83%AB%E3%82%AB%E3%83%95%E3%82%A7%29&amp;details=yancya+%E3%81%AE%E8%AA%95%E7%94%9F%E6%97%A5%E3%82%92%E7%A5%9D%E3%81%86%E4%BC%9A%E3%81%A7%E3%81%99%E3%80%82%0A%E6%96%99%E9%87%91%3A+1%2C500%E5%86%86%EF%BC%8B1%E3%83%89%E3%83%AA%E3%83%B3%E3%82%AF%EF%BC%88%E4%BA%88%E7%B4%84%E4%B8%8D%E8%A6%81%EF%BC%89%0A%E4%BC%9A%E5%A0%B4%3A+%E9%B6%AF%E8%B0%B7%23B5IDOLCAFE%28%E3%83%93%E3%83%BC%E3%82%B4%E3%82%A2%E3%82%A4%E3%83%89%E3%83%AB%E3%82%AB%E3%83%95%E3%82%A7%29+https%3A%2F%2Fuguisudani.wixsite.com%2Fb5idolcafe%0A%E8%A9%B3%E7%B4%B0%3A+https%3A%2F%2Fyancya.club%2Fevents%2Fbirthday%2F2026" target="_blank" rel="noopener">+ カレンダー ↗</a>
+            </div>
             <span class="stat-val">12.19 SAT</span>
             <span class="stat-sub">18:00 – 23:00（出入り自由）</span>
           </div>
@@ -448,7 +506,10 @@
 
     <section class="menu-section">
       <div class="panel">
-        <h2>募集要項 <span class="sub">INFORMATION</span></h2>
+        <div class="panel-head">
+          <h2>募集要項 <span class="sub">INFORMATION</span></h2>
+          <a class="cal-btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=yancya+%E7%94%9F%E8%AA%95+2026&amp;dates=20261219T090000Z/20261219T140000Z&amp;ctz=Asia/Tokyo&amp;location=%E9%B6%AF%E8%B0%B7%23B5IDOLCAFE%28%E3%83%93%E3%83%BC%E3%82%B4%E3%82%A2%E3%82%A4%E3%83%89%E3%83%AB%E3%82%AB%E3%83%95%E3%82%A7%29&amp;details=yancya+%E3%81%AE%E8%AA%95%E7%94%9F%E6%97%A5%E3%82%92%E7%A5%9D%E3%81%86%E4%BC%9A%E3%81%A7%E3%81%99%E3%80%82%0A%E6%96%99%E9%87%91%3A+1%2C500%E5%86%86%EF%BC%8B1%E3%83%89%E3%83%AA%E3%83%B3%E3%82%AF%EF%BC%88%E4%BA%88%E7%B4%84%E4%B8%8D%E8%A6%81%EF%BC%89%0A%E4%BC%9A%E5%A0%B4%3A+%E9%B6%AF%E8%B0%B7%23B5IDOLCAFE%28%E3%83%93%E3%83%BC%E3%82%B4%E3%82%A2%E3%82%A4%E3%83%89%E3%83%AB%E3%82%AB%E3%83%95%E3%82%A7%29+https%3A%2F%2Fuguisudani.wixsite.com%2Fb5idolcafe%0A%E8%A9%B3%E7%B4%B0%3A+https%3A%2F%2Fyancya.club%2Fevents%2Fbirthday%2F2026" target="_blank" rel="noopener">+ Google カレンダーに追加 ↗</a>
+        </div>
         <dl class="spec-list">
           <div class="spec-row">
             <dt>開始</dt>
